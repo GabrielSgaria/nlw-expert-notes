@@ -7,7 +7,7 @@ interface NewNoteCardProps {
   onNoteCreated: (content: string) => void;
 }
 
-let speechRecognition: SpeechRecognition | null = null
+let speechRecognition: SpeechRecognition | null = null;
 
 export function NewNoteCard({ onNoteCreated }: NewNoteCardProps) {
   const [shouldShowOnboarding, setShouldShowOnboarding] = useState(true);
@@ -29,8 +29,8 @@ export function NewNoteCard({ onNoteCreated }: NewNoteCardProps) {
   function handleSaveNote(event: FormEvent) {
     event.preventDefault();
 
-    if (content === '') {
-        return
+    if (content === "") {
+      return;
     }
 
     onNoteCreated(content);
@@ -42,46 +42,45 @@ export function NewNoteCard({ onNoteCreated }: NewNoteCardProps) {
   }
 
   function handleStartRecording() {
-    const isSpeechRecognitionAPIAvailable = 'SpeechRecognition' in window
-    || 'webkitSpeechRecognition' in window
+    const isSpeechRecognitionAPIAvailable =
+      "SpeechRecognition" in window || "webkitSpeechRecognition" in window;
 
     if (!isSpeechRecognitionAPIAvailable) {
-        alert('Infelizmente o seu navegador não suporta a API de gravação!')
-        return
+      alert("Infelizmente o seu navegador não suporta a API de gravação!");
+      return;
     }
-    
 
     setIsRecording(true);
-    setShouldShowOnboarding(false)
+    setShouldShowOnboarding(false);
 
-    const SpeechRecognitionAPI = window.SpeechRecognition || window.webkitSpeechRecognition
+    const SpeechRecognitionAPI =
+      window.SpeechRecognition || window.webkitSpeechRecognition;
 
-    speechRecognition = new SpeechRecognitionAPI()
+    speechRecognition = new SpeechRecognitionAPI();
 
-    speechRecognition.lang = 'pt-BR'
-    speechRecognition.continuous = true
-    speechRecognition.maxAlternatives = 1
-    speechRecognition.interimResults = true
-    
+    speechRecognition.lang = "pt-BR";
+    speechRecognition.continuous = true;
+    speechRecognition.maxAlternatives = 1;
+    speechRecognition.interimResults = true;
+
     speechRecognition.onresult = (event) => {
-        const transcription = Array.from(event.results).reduce((text, result) => {
-            return text.concat(result[0].transcript)
-        }, '')
-        setContent(transcription)
-    }
+      const transcription = Array.from(event.results).reduce((text, result) => {
+        return text.concat(result[0].transcript);
+      }, "");
+      setContent(transcription);
+    };
 
-    speechRecognition.onerror = (event) =>{
-        console.error(event)
-    }
-    speechRecognition.start()
+    speechRecognition.onerror = (event) => {
+      console.error(event);
+    };
+    speechRecognition.start();
   }
 
   function handleStopRecording() {
-    setIsRecording(false)
+    setIsRecording(false);
 
-    if(speechRecognition !== null){
-        speechRecognition.stop()
-
+    if (speechRecognition !== null) {
+      speechRecognition.stop();
     }
   }
 
@@ -141,12 +140,11 @@ export function NewNoteCard({ onNoteCreated }: NewNoteCardProps) {
 
             {isRecording ? (
               <button
-
                 type="button"
                 onClick={handleStopRecording}
                 className="w-full flex justify-center items-center gap-2 bg-slate-900 py-4 text-center text-sm text-slate-300 outline-none font-medium hover:text-slate-100"
               >
-                <div className="size-3 rounded-full bg-red-500 animate-pulse"/>
+                <div className="size-3 rounded-full bg-red-500 animate-pulse" />
                 Gravando! (Clique p/ interromper)
               </button>
             ) : (
